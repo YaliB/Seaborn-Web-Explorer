@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2>Pinned Questions</h2>
+
+    <p>Select a question. The page will show:</p>
+    <ul>
+      <li>The computed result</li>
+      <li>A plot image relevant to that question</li>
+    </ul>
+
+    <label class="label">Choose question</label>
+    <select class="select"
+            onchange="if(this.value){ window.location='/questions/' + this.value }">
+      <option value="">-- select --</option>
+      {% for q in questions %}
+        <option value="{{ q.id }}"
+          {% if selected_question_id == q.id %}selected{% endif %}>
+          {{ q.id }} — {{ q.title }}
+        </option>
+      {% endfor %}
+    </select>
+  </section>
+
+  {% if selected_question_id %}
+    <section class="card">
+      <h3>{{ question_title }}</h3>
+
+      <div class="block">
+        <h4>Result</h4>
+        <div class="result">
+          {% if result_html %}
+            {{ result_html | safe }}
+          {% else %}
+            <p><em>Result will appear here.</em></p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="block">
+        <h4>Plot</h4>
+        {% if plot_url %}
+          <img class="plot" src="../{{ plot_url }}" alt="Plot for question {{ selected_question_id }}" />
+        {% else %}
+          <div class="plot-placeholder">
+            <p><em>Plot will appear here.</em></p>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

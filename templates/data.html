@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Get Data{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2>Get Data</h2>
+    <p>Build a simple query:</p>
+    <ul>
+      <li>Select columns</li>
+      <li>Apply one filter condition</li>
+      <li>Limit the number of rows</li>
+    </ul>
+
+    <form class="form" method="get" action="/data">
+      <div class="field">
+        <label class="label">Select Columns:</label>
+        <div class="control">
+          {% set options = ['total_bill', 'tip', 'sex', 'smoker', 'day', 'time', 'size'] %}
+          {% for option in options %}
+          <label class="checkbox" style="margin-right: 15px; text-transform: capitalize;">
+            <input type="checkbox" name="cols" value="{{ option }}" 
+              {# מסמן אם האופציה בתוך הרשימה או אם זו טעינה ראשונית ואין עדיין בחירה #}
+              {% if not cols or option in cols %} checked {% endif %}>
+            {{ option }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label class="label">Filter column</label>
+          <div class="control">
+            <div class="select">
+              <select name="filter_col">
+                <option value="total_bill" {% if filter_col == 'total_bill' %}selected{% endif %}>Total Bill</option>
+                <option value="tip" {% if filter_col == 'tip' %}selected{% endif %}>Tip</option>
+                <option value="sex" {% if filter_col == 'sex' %}selected{% endif %}>Sex</option>
+                <option value="smoker" {% if filter_col == 'smoker' %}selected{% endif %}>Smoker</option>
+                <option value="day" {% if filter_col == 'day' %}selected{% endif %}>Day</option>
+                <option value="time" {% if filter_col == 'time' %}selected{% endif %}>Time</option>
+                <option value="size" {% if filter_col == 'size' %}selected{% endif %}>Size</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div class="field">
+          <label class="label">Operator</label>
+          <div class="control">
+            <div class="select">
+              <select name="op">
+                <option value="==" {% if op == '==' %}selected{% endif %}>== (Equal to)</option>
+                <option value="!=" {% if op == '!=' %}selected{% endif %}>!= (Not equal to)</option>
+                <option value=">"  {% if op == '>'  %}selected{% endif %}>&gt; (Greater than)</option>
+                <option value="<"  {% if op == '<'  %}selected{% endif %}>&lt; (Less than)</option>
+                <option value="contains" {% if op == 'contains' %}selected{% endif %}>Contains</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Value</label>
+          <input class="input" name="value" value="{{ value }}" placeholder="e.g. Sun" />
+        </div>
+
+        <div class="field">
+          <label class="label">Limit</label>
+          <input class="input" type="number" name="limit" value="{{ limit }}" min="1" max="200" />
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Run</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>Result table</h3>
+    {% if error_msg %}
+      <div class="notification is-danger" id="error-notification">
+        <strong>Error:</strong> {{ error_msg }}
+      </div>
+      <script>
+        // Show popup for error
+        window.addEventListener('DOMContentLoaded', function() {
+          var errDiv = document.getElementById('error-notification');
+          if (errDiv) {
+            alert(errDiv.textContent);
+          }
+        });
+      </script>
+    {% endif %}
+    {% if table_html %}
+      <div class="table">
+        {{ table_html | safe }}
+      </div>
+    {% else %}
+      <p><em>Table will appear here.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}

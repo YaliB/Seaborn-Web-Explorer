@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Seaborn Web Explorer{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header__top">
+      <h1 class="brand">Seaborn Web Explorer</h1>
+      <div class="dataset">Dataset: <strong>{{ dataset_name }}</strong></div>
+    </div>
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/questions">Questions</a>
+      <a href="/data">Get Data</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% if error %}
+      <div class="alert alert--error">{{ error }}</div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

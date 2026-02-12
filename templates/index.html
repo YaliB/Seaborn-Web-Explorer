@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2>What this app does</h2>
+    <ul>
+      <li>Choose a pinned question → see the answer + a plot.</li>
+      <li>Use “Get Data” to select columns and apply a simple filter.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Start</h2>
+    <div class="actions">
+      <a class="btn" href="/questions">Go to Questions</a>
+      <a class="btn" href="/data">Go to Get Data</a>
+    </div>
+  </section>
+{% endblock %}
