@@ -2,102 +2,127 @@
 {% block title %}Get Data{% endblock %}
 
 {% block content %}
-  <section class="card">
+<div id="loader" class="loader-container">
+    <div class="spinner"></div>
+    <p>Loading the data page</p>
+  </div>
+
+<section class="card">
     <h2>Get Data</h2>
-    <p>Build a simple query:</p>
-    <ul>
-      <li>Select columns</li>
-      <li>Apply one filter condition</li>
-      <li>Limit the number of rows</li>
-    </ul>
-
     <form class="form" method="get" action="/data">
-      <div class="field">
-        <label class="label">Select Columns:</label>
-        <div class="control">
-          {% set options = ['total_bill', 'tip', 'sex', 'smoker', 'day', 'time', 'size'] %}
-          {% for option in options %}
-          <label class="checkbox" style="margin-right: 15px; text-transform: capitalize;">
-            <input type="checkbox" name="cols" value="{{ option }}" 
-              {# מסמן אם האופציה בתוך הרשימה או אם זו טעינה ראשונית ואין עדיין בחירה #}
-              {% if not cols or option in cols %} checked {% endif %}>
-            {{ option }}
-          </label>
-          {% endfor %}
-        </div>
-      </div>
-
-      <div class="grid">
         <div class="field">
-          <label class="label">Filter column</label>
-          <div class="control">
-            <div class="select">
-              <select name="filter_col">
-                <option value="total_bill" {% if filter_col == 'total_bill' %}selected{% endif %}>Total Bill</option>
-                <option value="tip" {% if filter_col == 'tip' %}selected{% endif %}>Tip</option>
-                <option value="sex" {% if filter_col == 'sex' %}selected{% endif %}>Sex</option>
-                <option value="smoker" {% if filter_col == 'smoker' %}selected{% endif %}>Smoker</option>
-                <option value="day" {% if filter_col == 'day' %}selected{% endif %}>Day</option>
-                <option value="time" {% if filter_col == 'time' %}selected{% endif %}>Time</option>
-                <option value="size" {% if filter_col == 'size' %}selected{% endif %}>Size</option>
-              </select>
+            <label class="label">Select Columns:</label>
+            <div class="control">
+                {% set options = ['total_bill', 'tip', 'sex', 'smoker', 'day', 'time', 'size'] %}
+                {% for option in options %}
+                <label class="checkbox" style="margin-right: 15px; text-transform: capitalize;">
+                    <input type="checkbox" name="cols" value="{{ option }}" 
+                        {# Checks the option if it's in the list or if it's the initial load with no selection yet #}
+                        {% if not cols or option in cols %} checked {% endif %}>
+                    {{ option }}
+                </label>
+                {% endfor %}
             </div>
-          </div>
         </div>
-      </div>
 
-        <div class="field">
-          <label class="label">Operator</label>
-          <div class="control">
-            <div class="select">
-              <select name="op">
-                <option value="==" {% if op == '==' %}selected{% endif %}>== (Equal to)</option>
-                <option value="!=" {% if op == '!=' %}selected{% endif %}>!= (Not equal to)</option>
-                <option value=">"  {% if op == '>'  %}selected{% endif %}>&gt; (Greater than)</option>
-                <option value="<"  {% if op == '<'  %}selected{% endif %}>&lt; (Less than)</option>
-                <option value="contains" {% if op == 'contains' %}selected{% endif %}>Contains</option>
-              </select>
+        <div class="field" >
+            <label class="label">Filter column</label>
+            <div class="control">
+                <div class="select select-transparent">
+                    <select name="filter_col" id="filter_col_select" onchange="toggleFilterFields()">
+                        <option value="unselected" {% if filter_col == 'unselected' or not filter_col %}selected{% endif %}>Select a column to filter</option>
+                        {% for option in options %}
+                        <option value="{{ option }}" {% if filter_col == option %}selected{% endif %}>{{ option|replace('_', ' ')|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-          </div>
+        </div>
+
+        <div id="filter-details" {% if filter_col == 'unselected' or not filter_col %}style='display: none;'{% endif %}>
+            <div class="field">
+                <label class="label">Operator</label>
+                <div class="control">
+                    <div class="select select-transparent">
+                        <select name="op" id="op_select">
+                            <option value="==" {% if op == '==' %}selected{% endif %}>== (Equal to)</option>
+                            <option value="!=" {% if op == '!=' %}selected{% endif %}>!= (Not equal to)</option>
+                            <option value=">"  {% if op == '>'  %}selected{% endif %}>&gt; (Greater than)</option>
+                            <option value="<"  {% if op == '<'  %}selected{% endif %}>&lt; (Less than)</option>
+                            <option value="contains" {% if op == 'contains' %}selected{% endif %}>Contains</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Value</label>
+                <input class="input" name="value" id="value_input" value="{{ value }}" placeholder="e.g. Sun" />
+            </div>
         </div>
 
         <div class="field">
-          <label class="label">Value</label>
-          <input class="input" name="value" value="{{ value }}" placeholder="e.g. Sun" />
+            <label class="label">Limit</label>
+            <input class="input" type="number" name="limit" value="{{ limit or 20 }}" min="1" max="200" />
         </div>
 
-        <div class="field">
-          <label class="label">Limit</label>
-          <input class="input" type="number" name="limit" value="{{ limit }}" min="1" max="200" />
-        </div>
-      </div>
-
-      <button class="btn" type="submit">Run</button>
+        <button class="btn" type="submit" style="margin-top: 20px;">Run</button>
     </form>
-  </section>
+</section>
 
-  <section class="card">
+<section class="card">
     <h3>Result table</h3>
     {% if error_msg %}
-      <div class="notification is-danger" id="error-notification">
-        <strong>Error:</strong> {{ error_msg }}
-      </div>
-      <script>
-        // Show popup for error
-        window.addEventListener('DOMContentLoaded', function() {
-          var errDiv = document.getElementById('error-notification');
-          if (errDiv) {
-            alert(errDiv.textContent);
-          }
-        });
-      </script>
+        <div class="notification is-danger" id="error-notification">
+            <strong>Error:</strong> {{ error_msg }}
+        </div>
     {% endif %}
+
     {% if table_html %}
-      <div class="table">
-        {{ table_html | safe }}
-      </div>
+        <div class="table">
+            {{ table_html | safe }}
+        </div>
     {% else %}
-      <p><em>Table will appear here.</em></p>
+        <p><em>Table will appear here.</em></p>
     {% endif %}
-  </section>
+</section>
+
+<script>
+    /**
+     * Toggles the visibility of the filter details (Operator and Value)
+     * based on whether a column is selected for filtering.
+     */
+    function toggleFilterFields() {
+        const filterColSelect = document.getElementById('filter_col_select');
+        const filterDetails = document.getElementById('filter-details');
+        const opSelect = document.getElementById('op_select');
+        const valueInput = document.getElementById('value_input');
+
+        if (!filterColSelect || !filterDetails) return;
+
+        if (filterColSelect.value === 'unselected') {
+            // Hide fields if no column is selected
+            filterDetails.style.display = 'none';
+            
+            // Reset to default values when hidden
+            if(opSelect) opSelect.value = '==';
+            if(valueInput) valueInput.value = '';
+        } else {
+            // Show fields when a column is selected
+            filterDetails.style.display = 'block';
+        }
+    }
+
+    // Initialize UI state on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Run toggle logic to handle pre-selected values after form submission
+        toggleFilterFields();
+        
+        // Handle error notification popup if an error message exists
+        const errDiv = document.getElementById('error-notification');
+        if (errDiv) {
+            alert(errDiv.textContent.trim());
+        }
+    });
+</script>
 {% endblock %}

@@ -1,33 +1,168 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #fafafa; }
-.header { padding: 16px; background: #fff; border-bottom: 1px solid #e5e5e5; }
-.header__top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.brand { margin: 0; font-size: 20px; }
+/* General Layout */
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    background: #fafafa; 
+}
+
+.header { 
+    padding: 16px; 
+    background: #fff; 
+    border-bottom: 1px solid #e5e5e5; 
+}
+
+.header__top { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: baseline; 
+    gap: 12px; 
+}
+
 .dataset { color: #444; }
+.brand { margin: 0; font-size: 21px; margin-right: 20px;}
+
+/* Navigation Links */
 .nav { margin-top: 10px; }
-.nav a { margin-right: 12px; text-decoration: none; color: #0066cc; }
-.container { padding: 16px; max-width: 980px; margin: 0 auto; }
+.nav a { margin-right: 20px; text-decoration: none; color: #2600FF;}
+.nav a:hover { color: black ; }
+.nav a:active { color: black; text-decoration: underline; }
 
-.card { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
-.actions { display: flex; gap: 10px; }
-.btn { display: inline-block; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; background: #fff; text-decoration: none; cursor: pointer; }
-.btn:hover { background: #f3f3f3; }
+.container { 
+    padding: 16px; 
+    max-width: 980px; 
+    margin: 0 auto; 
+}
 
-.label { display: block; margin: 8px 0 6px; font-weight: 600; }
-.input, .select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+/* Card Styling */
+.card { 
+    background: #ffffff; 
+    border: 1px solid #e5e5e5; 
+    border-radius: 10px; 
+    padding: 14px; 
+    margin-bottom: 14px; 
+}
 
-.form .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-@media (max-width: 800px) { .form .grid { grid-template-columns: 1fr; } }
+/* Form Elements */
+.label { 
+    display: block; 
+    margin: 8px 0 6px; 
+    font-weight: 600; 
+}
 
-.alert { padding: 10px; border-radius: 8px; margin-bottom: 12px; }
-.alert--error { background: #ffecec; border: 1px solid #ffb3b3; }
+/* Unified height and styling for inputs and selects */
+.input, .select { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    height: 42px;           /* Standardized height for all form fields */
+    font-size: 14px;
+    background-color: #fff;
+}
 
-.plot { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #eee; }
-.plot-placeholder { padding: 18px; border: 1px dashed #ccc; border-radius: 8px; color: #666; }
+/* Specific select adjustments to remove default browser styling if needed */
+select.select {
+    cursor: pointer;
+    appearance: none; /* Removes default arrow in some browsers */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 1em;
+    padding-right: 30px;
+}
+.select-transparent {
+    border: 1px transparent solid; 
+}
 
+/* Grid System for 2-column layout */
+.form .grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px; 
+    align-items: end; /* Aligns labels and fields properly */
+}
+
+/* Responsive adjustment: stack columns on small screens */
+@media (max-width: 800px) { 
+    .form .grid { grid-template-columns: 1fr; } 
+}
+
+/* Buttons */
+.btn { 
+    display: inline-block; 
+    padding: 10px 12px; 
+    border-radius: 50px; 
+    border: 1px solid #2600FF; 
+    background: #2600FF; 
+    color: #FFFFFF; 
+    text-decoration: none; 
+    cursor: pointer; 
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.btn:hover { 
+    background: #D1D1D1; 
+    border-color: #D1D1D1;
+    color: #FFFFFF;
+}
+
+/* Tables and Results */
 .table { overflow-x: auto; }
 .table table { border-collapse: collapse; width: 100%; }
-.table th, .table td { border: 1px solid #e5e5e5; padding: 14px 16px; text-align: left; font-size: 1.08em; }
+.table th, .table td { 
+    border: 1px solid #e5e5e5; 
+    padding: 14px 16px; 
+    text-align: left; 
+    font-size: 1.08em; 
+}
 .table tr { height: 48px; }
-.table td { vertical-align: middle; }
-.result table { border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; margin-bottom: 10px; }
 .table th { background: #f6f6f6; }
+
+/* Error Notifications */
+.notification.is-danger {
+    background: #ffecec;
+    border: 1px solid #ffb3b3;
+    padding: 10px;
+    border-radius: 8px;
+    color: #cc0000;
+    margin-bottom: 12px;
+}
+
+/* Update the checkbox color to match your brand */
+input[type="checkbox"] {
+    accent-color: #2600FF; /* Changes the fill color when checked */
+    width: 15px;           /* Optional: slightly larger for better UX */
+    height: 15px;
+    cursor: pointer;
+}
+
+
+ /* Loader Styles */
+.loader-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* מוודא שזה מעל הכל */
+}
+
+/* אנימציית סיבוב פשוטה */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2600FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

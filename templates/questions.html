@@ -2,6 +2,11 @@
 {% block title %}Questions{% endblock %}
 
 {% block content %}
+<div id="loader" class="loader-container">
+    <div class="spinner"></div>
+    <p>Loading the questions page</p>
+  </div>
+
   <section class="card">
     <h2>Pinned Questions</h2>
 
@@ -30,7 +35,7 @@
 
       <div class="block">
         <h4>Result</h4>
-        <div class="result">
+        <div class="table">
           {% if result_html %}
             {{ result_html | safe }}
           {% else %}
@@ -43,6 +48,10 @@
         <h4>Plot</h4>
         {% if plot_url %}
           <img class="plot" src="../{{ plot_url }}" alt="Plot for question {{ selected_question_id }}" />
+          <br>
+          <a href="../{{ plot_url }}" download >
+            <button class="btn is-light">Download Plot</button>
+          </a>
         {% else %}
           <div class="plot-placeholder">
             <p><em>Plot will appear here.</em></p>
