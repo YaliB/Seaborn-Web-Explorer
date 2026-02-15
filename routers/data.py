@@ -41,9 +41,9 @@ def data_page(
                     elif op == "contains":
                         df = df[df[filter_col].astype(str).str.contains(str(value), case=False)]
                 except KeyError:
-                    error_msg = "The selected filter column does not exist. Please check your selection."
+                    error_msg = f"The selected filter column does not exist. Please check your selection.\n\nYou tried to filter on the column: {filter_col}"
                 except Exception:
-                    error_msg = "Filtering failed. Please check the value and operator you selected."
+                    error_msg = f"Filtering failed. Please check the value and operator you selected.\n\nYou tried to filter on the column: {filter_col} \nthe action: {op} \nwith the value: {value}"
             # ----------------------
             if cols:
                 try:
