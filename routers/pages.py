@@ -14,3 +14,7 @@ def home(request: Request) -> HTMLResponse:
             "dataset_name": "tips"
         }
     )
+
+
+async def custom_404_handler(request, exc):
+    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
